@@ -28,7 +28,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 const logo = require('../images/logo.svg');
-const MainTitle = "F-0";
+const MainTitle = "F-0.io";
 function logotype(props) {
   return (
     <div><Typography variant="h4">{MainTitle}</Typography></div>
@@ -41,6 +41,7 @@ const styles = theme => ({
     boxShadow: 'none',
     borderBottom: `1px solid ${theme.palette.grey['100']}`,
     backgroundColor: 'white',
+    zIndex: 10000,
 
   },
   inline: {
@@ -98,6 +99,9 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1,
+  },
+  Menu: {
+    zIndex: 99999,
   },
   sectionDesktop: {
     display: 'none',
@@ -184,6 +188,7 @@ class Topbar extends Component {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
+        className={classes.Menu}
       >
         <MenuItem onClick={this.handleMenuClose}>Sign in</MenuItem>
         <MenuItem onClick={this.handleMenuClose}>Guest</MenuItem>

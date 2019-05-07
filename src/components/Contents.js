@@ -1,19 +1,23 @@
 const Contents = [
   {
     label: "Overview",
-    pathname: "/"
+    pathname: "/",
+    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius id est laborum.",
   },
   {
     label: "Data",
-    pathname: "/"
+    pathname: "/",
+    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius id est laborum.",
   },
   {
     label: "Leaderboard",
-    pathname: "/"
+    pathname: "/",
+    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius id est laborum.",
   },
   {
     label: "Rules",
-    pathname: "/"
+    pathname: "/",
+    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius id est laborum.",
   },
 
 

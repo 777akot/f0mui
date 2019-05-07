@@ -13,8 +13,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-const textColor = "#ffffff";
-
 
 
 const styles = theme => ({
@@ -23,23 +21,25 @@ const styles = theme => ({
     boxShadow: 'none',
     borderBottom: `1px solid ${theme.palette.grey['100']}`,
     backgroundColor: '000',
-    padding: 0
-
+    padding: 0,
+    zindex: -1,
 
   },
   tabItem: {
     paddingTop: 20,
     paddingBottom: 20,
-    minWidth: 'auto'
+    minWidth: 'auto',
+    zindex: -1,
   },
 })
 
 
 class ContestMenu extends Component {
   state = {
+    pos: 'relative',
     value: 0,
     menuDrawer: false,
-
+    subContent: 0,
     anchorEl: null,
     mobileMoreAnchorEl: null,
   };
@@ -66,42 +66,42 @@ class ContestMenu extends Component {
 
   }
 
+
+  handleSubmenu = (index) => {
+
+    this.setState({subContent: index});
+    this.setState({value: index});
+    const subContent = index;
+    this.props.updateData(subContent);
+    return {
+      subContent
+    }
+  }
 render() {
 
   const { classes } = this.props;
 
-
+  const subContent = this.state.subContent;
 
   return (
-
+    <Grid style={this.props.thisStyle}>
     <Toolbar className={classes.ContestBar}>
-    <Grid xs={12} alignItems="baseline">
-    <React.Fragment>
-    <SwipeableDrawer anchor="right" open={this.state.menuDrawer} onClose={this.mobileMenuClose} onOpen={this.mobileMenuOpen}>
-      <AppBar/>
-      <List>
-        {ContestMenuContent.map((item, index) => (
-          <ListItem component={Link} to={{pathname: item.pathname, search: this.props.location.search}} button key={item.label}>
-            <ListItemText primary={item.label} />
-          </ListItem>
-        ))}
-      </List>
-    </SwipeableDrawer>
+    <Grid alignItems="baseline">
+
     <Tabs
       value={this.current() || this.state.value}
       indicatorColor="primary"
-      textColor="secondary"
+      textColor="primary"
       onChange={this.handleChange}
     >
-      {ContestMenuContent.map((item, index) => (
-
-        <Tab key={index} component={Link} to={`/roster/`} classes={{root: classes.tabItem}} label={item.label} />
+      {this.props.content.map((item, index) => (
+                <Tab label={item.label} className={classes.tabItem} onClick={() => this.handleSubmenu(index)}></Tab>
       ))}
     </Tabs>
-    </React.Fragment>
+
     </Grid>
     </Toolbar>
-
+    </Grid>
 
 
 

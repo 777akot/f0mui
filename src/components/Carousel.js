@@ -6,70 +6,71 @@ import Button from '@material-ui/core/Button';
 import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import { autoPlay } from 'react-swipeable-views-utils';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
+import swipeSteps from './SwipeSteps';
 
 const logo = require('../images/logo.svg');
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const tutorialSteps = [
-  {
-    label: 'A first label',
-    description: 'This is the first item on the label',
-    imgPath:
-      'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
-  },
-  {
-    label: 'A second label',
-    description: 'This is the second item on the label',
-    imgPath:
-      'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
-  },
-  {
-    label: 'A third label',
-    description: 'This is the third item on the label',
-    imgPath:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250&q=80',
-  },
-  {
-    label: 'A fifth label',
-    description: 'This is the fifth item on the label',
-    imgPath:
-      'https://images.unsplash.com/photo-1518732714860-b62714ce0c59?auto=format&fit=crop&w=400&h=250&q=60',
-  },
-  {
-    label: 'Other label',
-    description: 'This is other label',
-    imgPath:
-      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
-  },
-];
+const backgroundFirst = require('../images/Subtle-Prism.svg');
 
 const styles = theme => ({
-  imgContainer: {
+  carouselOver: {
+    display: 'block',
+    position: 'relative',
+    minHeight: 300,
+    padding:  theme.spacing.unit * 3,
+
+    backgroundSize: 'cover',
+    backgroundColor: '#373737',
+    backgroundPosition: 'center, center',
+  },
+  stepContainer: {
     overflow: 'hidden',
-    height: '400px',
+    height: '30vh' ,
+    flexGrow: 1,
+    color: "#aaaaaa",
   },
   img: {
     overflow: 'hidden',
-    width: '100%'
+    width: '100%',
+    height: 'inherit'
   },
   container: {
     maxWidth: 600,
+    height: '100%',
     flexGrow: 1,
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
-  },
-  stepsContainer: {
-    marginLeft: 72,
-    textAlign: 'left',
-    marginTop: 20,
-    height: 65
+    justifyContent: 'center',
   },
   bottomMargin: {
     marginBottom: theme.spacing.unit * 2
-  }
+  },
+  mobileStepper: {
+    backgroundColor: 'transparent',
+  },
+  whitetext: {
+    color: "#aaaaaa",
+  },
+  root: {
+    flexGrow: 1,
+    overflow: 'hidden',
+    backgroundSize: 'contain',
+
+    paddingBottom: 50
+  },
+  grid: {
+    width: 1200,
+    marginTop: 0,
+    [theme.breakpoints.down('sm')]: {
+      width: 'calc(100% - 20px)'
+    }
+  },
 });
 
 class Carousel extends Component {
@@ -95,21 +96,38 @@ class Carousel extends Component {
 
 render() {
   const { classes } = this.props;
-  const maxSteps = tutorialSteps.length;
+  const maxSteps = swipeSteps.length;
   const { activeStep } = this.state;
+
+/*<img className={classes.img} src={step.imgPath} alt={step.label} />*/
 
   return (
     <div>
+    <div className={classes.carouselOver}>
+    <Typography variant="h4" color='primary' gutterBottom>
+      Man and Machine Contest
+    </Typography>
     <AutoPlaySwipeableViews
       axis='x'
       index={activeStep}
+      interval='10000'
       onChangeIndex={this.handleStepChange}
       enableMouseEvents
     >
-      {tutorialSteps.map((step, index) => (
-        <div key={step.label} className={classes.imgContainer}>
+      {swipeSteps.map((step, index) => (
+        <div key={step.label} className={classes.stepContainer}>
           {Math.abs(activeStep - index) <= 2 ? (
-            <img className={classes.img} src={step.imgPath} alt={step.label} />
+            <div className={classes.root}>
+            <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
+            <Grid item xs={12} md={4}>
+            <Typography variant="h4" className={classes.whitetext}>{step.label}</Typography>
+            {step.description}
+            </Grid>
+            <Grid item xs={12} md={4}>
+            <img height="200" width="auto" src={step.imgPath}/>
+            </Grid>
+            </Grid>
+            </div>
           ) : null}
         </div>
       ))}
@@ -120,16 +138,17 @@ render() {
       activeStep={activeStep}
       className={classes.mobileStepper}
       nextButton={
-        <Button size="small" onClick={this.handleNext} disabled={activeStep === maxSteps - 1}>
+        <Button className={classes.whitetext} size="small" onClick={this.handleNext} disabled={activeStep === maxSteps - 1}>
           Next
         </Button>
       }
       backButton={
-        <Button size="small" onClick={this.handleBack} disabled={activeStep === 0}>
+        <Button className={classes.whitetext}  size="small" onClick={this.handleBack} disabled={activeStep === 0}>
           Back
         </Button>
       }
     />
+    </div>
     </div>
 
   )

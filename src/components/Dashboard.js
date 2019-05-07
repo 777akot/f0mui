@@ -12,27 +12,35 @@ import SimpleLineChart from './SimpleLineChart';
 import Months from './common/Months';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import Loading from './common/Loading';
-
+import PrimarySearchAppBar from './PrimarySearchAppBar';
+import ContestMenu from './ContestMenu';
+import DashContents from './DashContents';
 import Topbar from './Topbar';
+import ResponsiveDrawer from './ResponsiveDrawer';
+import NestedList from './NestedList';
+import HStepper from './HStepper';
+import FolderOpen from '@material-ui/icons/FolderOpen';
+import EditIcon from '@material-ui/icons/Edit';
+import ReactVirtualizedTable from './ReactVirtualizedTable';
+import VerticalLinearStepper from './VerticalLinearStepper'
 
 const numeral = require('numeral');
 numeral.defaultFormat('0,000');
 
-const backgroundShape = require('../images/shape.svg');
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+
     backgroundColor: theme.palette.grey['100'],
     overflow: 'hidden',
-    background: `url(${backgroundShape}) no-repeat`,
     backgroundSize: 'cover',
     backgroundPosition: '0 400px',
-    paddingBottom: 200
+    paddingBottom: 200,
+    display: 'flex',
   },
   grid: {
-    width: 1200,
     margin: `0 ${theme.spacing.unit * 2}px`,
+    marginTop: 60,
     [theme.breakpoints.down('sm')]: {
       width: 'calc(100% - 20px)'
     }
@@ -53,7 +61,9 @@ const styles = theme => ({
   topBar: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: theme.zIndex.drawer + 1,
+    marginTop: 100
   },
   outlinedButtom: {
     textTransform: 'uppercase',
@@ -106,7 +116,12 @@ const styles = theme => ({
     textAlign: 'center',
     marginTop: theme.spacing.unit * 4,
     marginBottom: theme.spacing.unit * 4
-  }
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    flexShrink: 0,
+  },
 });
 
 const monthRange = Months;
@@ -122,7 +137,8 @@ class Dashboard extends Component {
     totalInterest: 0,
     monthlyPayment: 0,
     totalPayment: 0,
-    data: []
+    data: [],
+    subContent: 0,
   };
 
   updateValues() {
@@ -162,213 +178,112 @@ class Dashboard extends Component {
     this.setState({start: value, loading: false});
     this.updateValues();
   }
+  updateData = (value) => {
+    this.setState({ subContent: value })
+  }
+
 
   render() {
     const { classes } = this.props;
     const { amount, period, start, monthlyPayment,
       monthlyInterest, data, loading } = this.state;
     const currentPath = this.props.location.pathname
+    const subContent = this.state.subContent;
+    const dashContent = DashContents;
+    const thisStyle = {
+      position: 'fixed',
+      backgroundColor: '#eee',
+      top: 68,
+      zIndex: 10000,
+      boxShadow: 'none',
+      width: '100%',
 
+    };
     return (
       <React.Fragment>
+
         <CssBaseline />
         <Topbar currentPath={currentPath} />
+
+
         <div className={classes.root}>
-          <Grid container justify="center">
-            <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
-              <Grid item xs={12}>
-                <div className={classes.topBar}>
-                  <div className={classes.block}>
-                    <Typography variant="h6" gutterBottom>Dashboard</Typography>
-                    <Typography variant="body1">
-                      Adjust and play with our sliders.
-                    </Typography>
-                  </div>
-                  <div>
-                    <Button variant="outlined" className={classes.outlinedButtom}>
-                      Get help
-                    </Button>
-                  </div>
-                </div>
+
+            <Grid spacing={24} justify="center" container>
+              <Grid item xs={12} className={classes.topBar}>
+
+
               </Grid>
-              <Grid item xs={12} md={4}>
-                <Paper className={classes.paper}>
-                  <div>
-                    <Typography variant="subtitle1" gutterBottom>
-                      How much you want to transfer
-                    </Typography>
-                    <Typography variant="body1">
-                      Use slider to set the amount you need.
-                    </Typography>
-                    <div className={classes.blockCenter}>
-                      <Typography color='secondary' variant="h6" gutterBottom>
-                        {numeral(amount).format()} USD
-                      </Typography>
-                    </div>
-                    <div>
-                      <Slider
-                        value={amount}
-                        min={20000}
-                        max={150000}
-                        step={15000}
-                        onChange={this.handleChangeAmount}
-                      />
-                    </div>
-                    <div className={classes.rangeLabel}>
-                      <div>
-                        <Typography variant="subtitle2">
-                          15,000 USD
-                        </Typography>
-                      </div>
-                      <div>
-                        <Typography variant="subtitle2">
-                          150,000 USD
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                </Paper>
+
+
+              <Grid item xs={2}>
+
+                  <NestedList />
+
               </Grid>
-              <Grid item xs={12} md={4}>
-                <Paper className={classes.paper}>
-                  <div>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Period
+
+
+
+              <Grid item xs={10} container spacing={24}>
+
+                <Grid item xs={12} alignItems="center" container justify="left">
+                  <FolderOpen style={{marginRight: 12}}/>
+                  <Typography variant="h6" gutterBottom>My Contests/Man & Machine</Typography>
+
+                </Grid>
+
+                <Grid item xs={12} md={5} container>
+
+                  <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                  <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                    Stage
                     </Typography>
-                    <Typography variant="body1">
-                      A sample period
-                    </Typography>
-                    <div className={classes.blockCenter}>
-                      <Typography color='secondary' variant="h6" gutterBottom>
-                        {period} months
-                      </Typography>
-                    </div>
-                    <div>
-                      <Slider
-                        value={period}
-                        min={1}
-                        max={6}
-                        step={1}
-                        onChange={this.handleChangePeriod}
-                      />
-                    </div>
-                    <div className={classes.rangeLabel}>
-                      <div>
-                        <Typography variant="subtitle2">
-                          1 month
-                        </Typography>
-                      </div>
-                      <div>
-                        <Typography variant="subtitle2">
-                          6 months
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Paper className={classes.paper}>
-                  <div>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Start date
-                    </Typography>
-                    <Typography variant="body1">
-                      Set your preferred start date.
-                    </Typography>
-                    <div className={classes.blockCenter}>
-                      <Typography color='secondary' variant="h6" gutterBottom>
-                        {monthRange[start]}
-                      </Typography>
-                    </div>
-                    <div>
-                      <Slider
-                        value={start}
-                        min={0}
-                        max={5}
-                        step={1}
-                        onChange={this.handleChangeStart}
-                      />
-                    </div>
-                    <div className={classes.rangeLabel}>
-                      <div>
-                        <Typography variant="subtitle2">
-                          Dec 2018
-                        </Typography>
-                      </div>
-                      <div>
-                        <Typography variant="subtitle2">
-                          May 2019
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid container spacing={24} justify="center">
-                <Grid item xs={12} md={8} >
-                  <Paper className={classes.paper} style={{position: 'relative'}}>
-                    <Loading loading={loading} />
-                    <div className={loading ? classes.loadingState : ''}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Some details
-                      </Typography>
-                      <Typography variant="body1">
-                        Details about the graph
-                      </Typography>
-                      <div style={{marginTop: 14, marginBottom: 14}}>
-                        <div className={classes.inlining}>
-                          <Avatar className={classes.loanAvatar}></Avatar>
-                          <Typography className={classes.inlining} variant="subtitle2" gutterBottom>
-                            Type
-                          </Typography>
-                          <Typography className={classes.inlining} color='secondary' variant="h6" gutterBottom>
-                            {numeral(monthlyPayment).format()} units
-                          </Typography>
-                        </div>
-                        <div className={classes.inlining}>
-                          <Avatar className={classes.interestAvatar}></Avatar>
-                          <Typography className={classes.inlining} variant="subtitle2" gutterBottom>
-                            Othe type
-                          </Typography>
-                          <Typography className={classes.inlining} color="secondary" variant="h6" gutterBottom>
-                            {numeral(monthlyInterest).format()} units
-                          </Typography>
-                        </div>
-                      </div>
-                      <div >
-                        <SimpleLineChart data={data} />
-                      </div>
-                    </div>
+                    <VerticalLinearStepper />
                   </Paper>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Paper className={classes.paper} style={{position: 'relative'}}>
-                  <Loading loading={loading} />
-                  <div className={loading ? classes.loadingState : ''}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      State
-                    </Typography>
-                    <div className={classes.mainBadge}>
-                      <VerifiedUserIcon style={{fontSize: 72}} fontSize={'large'} color={'secondary'} />
-                      <Typography variant="h5" color={'secondary'} gutterBottom>
-                        Verified
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} md={7}>
+                  <Paper className={classes.paper}>
+                    <div>
+                      <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                        LeaderBoard
                       </Typography>
+                      <ReactVirtualizedTable />
                     </div>
-                    <div className={classes.buttonBar}>
-                      <Button to={{ pathname: "/dashboard", search: `?type=save` }} component={Link} variant="outlined" className={classes.actionButtom}>
-                        Save
-                      </Button>
-                      <Button to={{ pathname: "/dashboard", search: `?type=apply` }} component={Link} color='primary' variant="contained" className={classes.actionButtom}>
-                        Apply
-                      </Button>
-                    </div>
-                  </div>
                   </Paper>
                 </Grid>
+
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                      Content
+                    </Typography>
+                    <ContestMenu updateData={this.updateData} content={dashContent} />
+                    {dashContent.slice(subContent,subContent + 1).map((item, index) => (
+
+                      <Grid className={classes.grid}>
+                        <Typography style={{marginBottom: 40}}>
+                        {item.content}
+                        </Typography>
+                        <Button variant="outlined"><EditIcon /></Button>
+                      </Grid>
+
+                    ))}
+                  </Paper>
+                </Grid>
+
+
               </Grid>
+
+
+
+
+
+
             </Grid>
-          </Grid>
+
+
         </div>
       </React.Fragment>
     )
