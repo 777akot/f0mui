@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, BrowserRouter, Switch } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
-import Signin from './components/Signin'
 import Main from './components/Main'
 import Signup from './components/Signup'
 import ScrollToTop from './components/ScrollTop'
