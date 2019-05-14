@@ -15,7 +15,6 @@ export default props => (
           <Route exact path='/' component={ Main } />
           <Route exact path='/dashboard' component={ Dashboard } />
           <Route exact path='/signup' component={ Signup } />
-          <Route exact path='/signin' component={ Signin } />
         </Switch>
       </ScrollToTop>
     </BrowserRouter>
