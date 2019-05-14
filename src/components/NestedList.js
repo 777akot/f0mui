@@ -1,18 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import OutlinedFlag from '@material-ui/icons/OutlinedFlag';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider';
 import ControlledOpenSelect from './ControlledOpenSelect';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -21,21 +18,120 @@ const styles = theme => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
   },
 });
 
+class ContestSubMenu extends React.Component {
+  state = {
+    contestopen: false,
+    filesopen: false,
+    currentcontestopen: false,
+    label: 'contest',
+  };
+  handleClick = (value) => {
+    if (value==='currentcontestopen') {
+       this.props.selectedPart(this.state.label);
+       this.setState(state => ({ [value]: true }));
+    } else {
+     this.setState(state => ({ [value]: !state[value] }))};
+  };
+  render() {
+    const { classes } = this.props;
+
+    return(
+      <>
+      <ListItem button onClick={() => (this.handleClick('contestopen'))}>
+        <ListItemIcon>
+          <OutlinedFlag />
+        </ListItemIcon>
+        <ListItemText primary="My Contests"/>
+        {this.state.contestopen ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={this.state.contestopen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button onClick={() => (this.handleClick('currentcontestopen'))}>
+            <ListItemText className={classes.nested} align='right' style={{border: '0px solid'}} primary="Man & Machine"/>
+          </ListItem>
+        </List>
+      </Collapse>
+
+
+
+      {this.state.currentcontestopen && (this.props.currentpart === 'contest') ?
+      <><Divider />
+      <ListItem>
+         <ControlledOpenSelect />
+      </ListItem>
+
+      <Divider />
+
+      <ListItem button onClick={() => (this.handleClick('filesopen'))}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText inset primary="Files" />
+        {this.state.filesopen ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+
+      <Collapse in={this.state.filesopen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem>Datasets</ListItem>
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+
+            </ListItemIcon>
+            <ListItemText  primary="Train" />
+          </ListItem>
+
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+
+            </ListItemIcon>
+            <ListItemText inset primary="Test" />
+          </ListItem>
+
+          <Divider />
+
+          <ListItem>Docs</ListItem>
+
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+
+            </ListItemIcon>
+            <ListItemText inset primary="Guide" />
+          </ListItem>
+
+          <ListItem button className={classes.nested}>
+            <ListItemIcon>
+
+            </ListItemIcon>
+            <ListItemText inset primary="Reference" />
+          </ListItem>
+        </List>
+      </Collapse>
+
+      </>
+      : ''}
+      </>
+    );
+  }
+
+}
+
 class NestedList extends React.Component {
   state = {
-    contestopen: true,
-    filesopen: false,
-  };
+
+    currentpart: '',
+  }
 
   handleClick = (value) => {
-    this.setState(state => ({ [value]: !state[value] }));
+
+       this.props.selectedPart(value);
+       this.setState({currentpart: value})
   };
 
   render() {
@@ -47,85 +143,14 @@ class NestedList extends React.Component {
 
         className={classes.root}
       >
-      <ListItem button>
+      <ListItem button onClick={() => {this.handleClick('account')}}>
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
         <ListItemText primary="Account" />
       </ListItem>
 
-        <ListItem button onClick={() => (this.handleClick('contestopen'))}>
-          <ListItemIcon>
-            <OutlinedFlag />
-          </ListItemIcon>
-          <ListItemText primary="My Contests"/>
-          {this.state.contestopen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={this.state.contestopen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-
-            <ListItem button className={classes.nested}>
-              <ListItemText  primary="Man & Machine"/>
-            </ListItem>
-
-          </List>
-        </Collapse>
-
-        <Divider />
-
-        <ListItem>
-        <ListItemIcon>
-
-        </ListItemIcon>
-          <ControlledOpenSelect />
-        </ListItem>
-
-        <Divider />
-
-        <ListItem button onClick={() => (this.handleClick('filesopen'))}>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText inset primary="Files" />
-          {this.state.filesopen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-
-        <Collapse in={this.state.filesopen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem>Datasets</ListItem>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-
-              </ListItemIcon>
-              <ListItemText  primary="Train" />
-            </ListItem>
-
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-
-              </ListItemIcon>
-              <ListItemText inset primary="Test" />
-            </ListItem>
-
-            <Divider />
-
-            <ListItem>Docs</ListItem>
-
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-
-              </ListItemIcon>
-              <ListItemText inset primary="Guide" />
-            </ListItem>
-
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-
-              </ListItemIcon>
-              <ListItemText inset primary="Reference" />
-            </ListItem>
-          </List>
-        </Collapse>
+      <ContestSubMenu {...this.props}/>
       </List>
     );
   }

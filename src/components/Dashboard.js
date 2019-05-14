@@ -1,28 +1,21 @@
 import React,  { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/lab/Slider';
 import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import SimpleLineChart from './SimpleLineChart';
-import Months from './common/Months';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import Loading from './common/Loading';
-import PrimarySearchAppBar from './PrimarySearchAppBar';
 import ContestMenu from './ContestMenu';
 import DashContents from './DashContents';
 import Topbar from './Topbar';
-import ResponsiveDrawer from './ResponsiveDrawer';
 import NestedList from './NestedList';
-import HStepper from './HStepper';
 import FolderOpen from '@material-ui/icons/FolderOpen';
 import EditIcon from '@material-ui/icons/Edit';
 import ReactVirtualizedTable from './ReactVirtualizedTable';
-import VerticalLinearStepper from './VerticalLinearStepper'
+import VerticalLinearStepper from './VerticalLinearStepper';
+import EssayForm from './EssayForm';
+import Footer from './Footer';
 
 const numeral = require('numeral');
 numeral.defaultFormat('0,000');
@@ -30,25 +23,27 @@ numeral.defaultFormat('0,000');
 
 const styles = theme => ({
   root: {
-
+    flexGrow: 1,
     backgroundColor: theme.palette.grey['100'],
     overflow: 'hidden',
     backgroundSize: 'cover',
     backgroundPosition: '0 400px',
-    paddingBottom: 200,
     display: 'flex',
+    paddingRight: 28,
+    paddingBottom: 32,
   },
   grid: {
     margin: `0 ${theme.spacing.unit * 2}px`,
     marginTop: 60,
     [theme.breakpoints.down('sm')]: {
-      width: 'calc(100% - 20px)'
+      width: 'calc(100% - 20px)',
     }
   },
   loadingState: {
     opacity: 0.05
   },
   paper: {
+    boxShadow: false,
     padding: theme.spacing.unit * 3,
     textAlign: 'left',
     color: theme.palette.text.secondary
@@ -124,168 +119,199 @@ const styles = theme => ({
   },
 });
 
-const monthRange = Months;
-
-class Dashboard extends Component {
-
+class DashAccountProfile extends Component {
   state = {
-    loading: true,
-    amount: 15000,
-    period: 3,
-    start: 0,
-    monthlyInterest: 0,
-    totalInterest: 0,
-    monthlyPayment: 0,
-    totalPayment: 0,
-    data: [],
-    subContent: 0,
+    open: false,
   };
-
-  updateValues() {
-    const { amount, period, start } = this.state;
-    const monthlyInterest = (amount)*(Math.pow(0.01*(1.01), period))/(Math.pow(0.01, period - 1))
-    const totalInterest = monthlyInterest * (period + start);
-    const totalPayment = amount + totalInterest;
-    const monthlyPayment = period > start ? totalPayment/(period - start) : totalPayment/(period)
-
-    const data = Array.from({length: period + start}, (value, i) => {
-      const delayed = i < start;
-      return {
-        name: monthRange[i],
-        'Type': delayed ? 0 : Math.ceil(monthlyPayment).toFixed(0),
-        'OtherType': Math.ceil(monthlyInterest).toFixed(0)
-      }
-    })
-
-    this.setState({monthlyInterest, totalInterest, totalPayment, monthlyPayment, data})
-  }
-
-  componentDidMount() {
-    this.updateValues();
-  }
-
-  handleChangeAmount = (event, value) => {
-    this.setState({amount: value, loading: false});
-    this.updateValues();
-  }
-
-  handleChangePeriod = (event, value) => {
-    this.setState({period: value, loading: false});
-    this.updateValues();
-  }
-
-  handleChangeStart = (event, value) => {
-    this.setState({start: value, loading: false});
-    this.updateValues();
-  }
-  updateData = (value) => {
-    this.setState({ subContent: value })
-  }
-
 
   render() {
     const { classes } = this.props;
-    const { amount, period, start, monthlyPayment,
-      monthlyInterest, data, loading } = this.state;
-    const currentPath = this.props.location.pathname
-    const subContent = this.state.subContent;
+    const updateData = this.props.updateData;
     const dashContent = DashContents;
-    const thisStyle = {
-      position: 'fixed',
-      backgroundColor: '#eee',
-      top: 68,
-      zIndex: 10000,
-      boxShadow: 'none',
-      width: '100%',
+    const subContent = this.props.subContent;
 
-    };
     return (
-      <React.Fragment>
+      <>{this.props.open ?
+      <>
+      <Grid item xs={12} alignItems="center" container>
 
-        <CssBaseline />
-        <Topbar currentPath={currentPath} />
+        <Typography variant="h6" gutterBottom>Profile</Typography>
 
+      </Grid>
+      <Grid item xs={12}>
+        <Paper className={classes.paper}>
+          <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+            Content
+          </Typography>
+          <ContestMenu updateData={updateData} content={dashContent} />
+          {dashContent.slice(subContent,subContent + 1).map((item, index) => (
 
-        <div className={classes.root}>
+            <Grid className={classes.grid} key={index}>
+              <Typography style={{marginBottom: 40}}>
+              {item.content}
+              </Typography>
 
-            <Grid spacing={24} justify="center" container>
-              <Grid item xs={12} className={classes.topBar}>
-
-
-              </Grid>
-
-
-              <Grid item xs={2}>
-
-                  <NestedList />
-
-              </Grid>
-
-
-
-              <Grid item xs={10} container spacing={24}>
-
-                <Grid item xs={12} alignItems="center" container justify="left">
-                  <FolderOpen style={{marginRight: 12}}/>
-                  <Typography variant="h6" gutterBottom>My Contests/Man & Machine</Typography>
-
-                </Grid>
-
-                <Grid item xs={12} md={5} container>
-
-                  <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                  <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
-                    Stage
-                    </Typography>
-                    <VerticalLinearStepper />
-                  </Paper>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12} md={7}>
-                  <Paper className={classes.paper}>
-                    <div>
-                      <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
-                        LeaderBoard
-                      </Typography>
-                      <ReactVirtualizedTable />
-                    </div>
-                  </Paper>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
-                      Content
-                    </Typography>
-                    <ContestMenu updateData={this.updateData} content={dashContent} />
-                    {dashContent.slice(subContent,subContent + 1).map((item, index) => (
-
-                      <Grid className={classes.grid}>
-                        <Typography style={{marginBottom: 40}}>
-                        {item.content}
-                        </Typography>
-                        <Button variant="outlined"><EditIcon /></Button>
-                      </Grid>
-
-                    ))}
-                  </Paper>
-                </Grid>
-
-
-              </Grid>
-
-
-
-
-
-
+              <Button variant="outlined" onClick={() => {this.props.editText(item)}}><EditIcon /></Button>
             </Grid>
 
+          ))}
+        </Paper>
+      </Grid>
+      <Grid style={{marginBottom: 200}}></Grid>
+      </>
+      : ''}
+      </>
+    )
+  }
+}
 
+
+class DashContest extends Component {
+  state = {
+    open: false,
+
+  };
+  textEditor = () => {
+    alert("TEXT");
+    return <EssayForm open={this.state.editing} textValue={DashContents[this.state.subContent].content} />};
+
+  render() {
+
+    const { classes } = this.props;
+    const subContent = this.props.subContent;
+    const dashContent = DashContents;
+    const updateData = this.props.updateData;
+    const textEditor = this.props.textEditor;
+
+    return (
+      <>{this.props.open ?
+      <Grid justify='flex-start' direction='row' alignItems='stretch' spacing={24} container>
+          <Grid item xs={12} container>
+            <FolderOpen style={{marginRight: 12}}/>
+            <Typography variant="h6" gutterBottom>My Contests/Man & Machine</Typography>
+
+          </Grid>
+
+          <Grid item xs={12} md={5} container>
+
+
+            <Paper className={classes.paper}>
+              <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+              Stage
+              </Typography>
+              <VerticalLinearStepper />
+            </Paper>
+
+          </Grid>
+
+          <Grid item xs={12} md={7}>
+            <Paper className={classes.paper}>
+                <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                  LeaderBoard
+                </Typography>
+                <ReactVirtualizedTable />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                Content
+              </Typography>
+              <ContestMenu updateData={updateData} content={dashContent} />
+              {dashContent.slice(subContent,subContent + 1).map((item, index) => (
+
+                <Grid className={classes.grid} key={index}>
+                  <Typography style={{marginBottom: 40}}>
+                  {item.content}
+                  </Typography>
+
+                  <Button variant="outlined" onClick={() => {this.props.editText(item)}}><EditIcon /></Button>
+                </Grid>
+
+              ))}
+            </Paper>
+          </Grid>
+
+      </Grid>
+      : ''}
+      </>
+    )
+  }
+}
+
+
+
+
+class Dashboard extends Component {
+
+
+  state = {
+    loading: true,
+    totalPayment: 0,
+    subContent: 0,
+    authorized: true,
+    editing: false,
+    selectedPart: 'account',
+  };
+
+
+  updateData = (value) => {
+    this.setState({ subContent: value })
+    this.setState({ editing: false })
+  }
+
+  editText = (item) => {
+
+    if(this.state.editing===false){
+      this.setState({ editing: true });
+      alert(this.state.subContent + ' . ' + item + ' . ' + this.textEditor);
+
+    } else {
+      this.setState({ editing: false });
+      item = 0;
+
+    }
+
+  }
+
+  partSelector = (value) => {
+    //alert(value);
+    this.setState({ selectedPart: value });
+  }
+
+  render() {
+    const { classes } = this.props;
+    const currentPath = this.props.location.pathname
+    const editing = this.state.editing;
+
+    return (
+      <>
+
+        <CssBaseline />
+        <Topbar currentPath={currentPath}  signdialogopen={this.signdialogopen} authorized={this.state.authorized}/>
+        <div className={classes.root}>
+        <Grid direction="row" alignItems="stretch" justify="space-evenly" container style={{marginTop:70}} spacing={24}>
+          <Grid item xs={12}></Grid>
+
+          <Grid item xs={2}>
+
+              <NestedList selectedPart={this.partSelector} currentpart={this.state.selectedPart} />
+
+          </Grid>
+          <Grid item xs={10}>
+            {this.state.selectedPart === 'account' ?
+
+            <DashAccountProfile {...this.props} updateData={this.updateData} open={this.state.selectedPart==='account'}/>
+             :
+            <DashContest {...this.props} updateData={this.updateData} open={this.state.selectedPart==='contest'} subContent={this.state.subContent} editText={this.editText} />
+
+            }
+          </Grid>
+        </Grid>
         </div>
-      </React.Fragment>
+        <Footer />
+      </>
     )
   }
 }

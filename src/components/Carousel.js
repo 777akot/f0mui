@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import { autoPlay } from 'react-swipeable-views-utils';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import swipeSteps from './SwipeSteps';
 
-const logo = require('../images/logo.svg');
-
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const backgroundFirst = require('../images/Subtle-Prism.svg');
+//const backgroundFirst = require('../images/Subtle-Prism.svg');
 
 const styles = theme => ({
   carouselOver: {
@@ -25,7 +22,7 @@ const styles = theme => ({
     padding:  theme.spacing.unit * 3,
 
     backgroundSize: 'cover',
-    backgroundColor: '#373737',
+    backgroundColor: '#212121',
     backgroundPosition: 'center, center',
   },
   stepContainer: {
@@ -110,7 +107,7 @@ render() {
     <AutoPlaySwipeableViews
       axis='x'
       index={activeStep}
-      interval='10000'
+      interval={10000}
       onChangeIndex={this.handleStepChange}
       enableMouseEvents
     >
@@ -124,7 +121,7 @@ render() {
             {step.description}
             </Grid>
             <Grid item xs={12} md={4}>
-            <img height="200" width="auto" src={step.imgPath}/>
+            <img height="200" width="auto" src={step.imgPath} alt=""/>
             </Grid>
             </Grid>
             </div>

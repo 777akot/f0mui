@@ -15,20 +15,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import MyMenu from './MyMenu';
 import Menu from '@material-ui/core/Menu';
-
-import PropTypes from 'prop-types';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import AccountCircle from '@material-ui/icons/PersonOutline';
+import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 
-const logo = require('../images/logo.svg');
-const MainTitle = "F-0.io";
+import PopMenu from './PopMenu';
+
+const MainTitle = "F-0";
 function logotype(props) {
   return (
     <div><Typography variant="h4">{MainTitle}</Typography></div>
@@ -111,12 +105,61 @@ const styles = theme => ({
   },
 })
 
+const messagesArray = [
+  'Atria',
+  'Callisto',
+  'Dione',
+  'Ganymede',
+  'Hangouts Call',
+  'Luna',
+  'Oberon',
+];
+
+const accountMenuArray = [
+  'Profile',
+  'Sign out',
+];
+
+class AccountCard extends Component {
+  state = {
+    open: false,
+  };
+  accountName = "Admin";
+  accountAvatar = <AccountCircle/>;
+  accountMail = "admin@f-0.io";
+  changeState = () => {
+  this.setState(() => ({ open: this.props.open }))
+  return (
+    this.state.open
+  );
+}
+  render() {
+
+    if(this.props.open==true) {
+    this.result =
+    <Grid container alignItems="baseline" spacing={24}>
+    <Grid item xs={12}>
+    {this.accountAvatar}
+    {this.accountName}
+    </Grid>
+    <Grid item xs={12}>
+    {this.accountMail}
+    </Grid>
+    </Grid>
+
+    } else {this.result = ''}
+    return (
+      this.result
+    );
+  }
+}
+
+
 class Topbar extends Component {
 
   state = {
     value: 0,
     menuDrawer: false,
-
     anchorEl: null,
     mobileMoreAnchorEl: null,
   };
@@ -144,15 +187,20 @@ class Topbar extends Component {
 
   mobileMenuOpen = (event) => {
     this.setState({ menuDrawer: true });
-  }
+  };
 
   mobileMenuClose = (event) => {
     this.setState({ menuDrawer: false });
-  }
+  };
+
+  handleSignin = () => {
+    this.props.signdialogopen('true');
+    this.handleMenuClose();
+  };
 
   componentDidMount() {
     window.scrollTo(0, 0);
-  }
+  };
 
   current = () => {
     if(this.props.currentPath === '/home') {
@@ -161,45 +209,39 @@ class Topbar extends Component {
     if(this.props.currentPath === '/dashboard') {
       return 1
     }
-    if(this.props.currentPath === '/signup') {
-      return 2
-    }
-    if(this.props.currentPath === '/wizard') {
-      return 3
-    }
-    if(this.props.currentPath === '/cards') {
-      return 4
-    }
 
   }
 
   render() {
 
     const { classes } = this.props;
+    const authorized = this.props.authorized;
 
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    function renderAccountMenu(handleProfileMenuOpen) {
+    if(authorized===true){
+    return <div className={classes.sectionDesktop}>
+      <PopMenu contents={messagesArray}>
+        <Badge badgeContent={17} color="primary">
+        <NotificationsIcon />
+        </Badge>
+        <></>
+        <div>Messages</div>
 
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-        className={classes.Menu}
-      >
-        <MenuItem onClick={this.handleMenuClose}>Sign in</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>Guest</MenuItem>
-      </Menu>
-    );
+      </PopMenu>
+      <PopMenu contents={accountMenuArray}>
+        <AccountCircle />
+        <></>
+        <AccountCard open={true}/>
+        
+      </PopMenu>
+    </div>
+    }}
 
     return (
 
       <AppBar position="fixed" color="default" className={classes.appBar}>
         <Toolbar>
-            <Grid container xs={12} spacing={24} alignItems="baseline">
+            <Grid container spacing={24} alignItems="baseline">
               <Grid item xs={12} className={classes.flex}>
                   <div className={classes.inline}>
                     <Typography variant="h6" color="inherit" noWrap>
@@ -233,15 +275,28 @@ class Topbar extends Component {
                             ))}
                           </List>
                         </SwipeableDrawer>
+
+
+
                         <Tabs
                           value={this.current() || this.state.value}
                           indicatorColor="primary"
                           textColor="primary"
                           onChange={this.handleChange}
                         >
-                          {MyMenu.map((item, index) => (
-                            <Tab key={index} component={Link} to={{pathname: item.pathname, search: this.props.location.search}} classes={{root: classes.tabItem}} label={item.label} />
-                          ))}
+                          {MyMenu
+                            .filter(item => item.authorized===this.props.authorized)
+                            .map((item, index) =>
+                              <Tab
+                                key={index}
+                                component={Link}
+                                to={{pathname: item.pathname}}
+                                onClick={this.handleSignin}
+                                classes={{root: classes.tabItem}}
+                                label={item.label}
+                                />
+
+                          )}
                         </Tabs>
                       </div>
 
@@ -253,23 +308,9 @@ class Topbar extends Component {
               </Grid>
 
             </Grid>
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
+            {renderAccountMenu(this.handleProfileMenuOpen)}
         </Toolbar>
-{renderMenu}
+
       </AppBar>
 
 

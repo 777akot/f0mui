@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './App.css';
 import Routes from './routes'
-import { blue, indigo } from '@material-ui/core/colors'
-import { createBrowserHistory } from "history";
 
 const theme = createMuiTheme({
   palette: {
@@ -13,9 +11,13 @@ const theme = createMuiTheme({
       contrastText: '#ffffff'
     },
     primary: {
-      main: '#700099',
+      main: '#5327b2',
       contrastText: '#ffffff',
 
+    },
+    error: {
+      main: '#d8a200',
+      contrastText: '#ffffff'
     },
     text: {
       primary: "#212121",
@@ -24,7 +26,7 @@ const theme = createMuiTheme({
   },
 
   typography: {
-    // Use the system font instead of the default Roboto font.
+    useNextVariants: true,
     display1: {
       color: "#ffffff"
     },
@@ -34,8 +36,6 @@ const theme = createMuiTheme({
     ].join(',')
   }
 });
-
-var hist = createBrowserHistory();
 
 class App extends Component {
   render() {

@@ -1,18 +1,11 @@
 import React,  { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link, withRouter } from 'react-router-dom';
-import ContestMenuContent from './ContestMenuContent';
+import { withRouter } from 'react-router-dom';
 
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 
 const styles = theme => ({
@@ -39,7 +32,7 @@ class ContestMenu extends Component {
     pos: 'relative',
     value: 0,
     menuDrawer: false,
-    subContent: 0,
+    contentOutside: 0,
     anchorEl: null,
     mobileMoreAnchorEl: null,
   };
@@ -69,24 +62,23 @@ class ContestMenu extends Component {
 
   handleSubmenu = (index) => {
 
-    this.setState({subContent: index});
+    this.setState({contentOutside: index});
     this.setState({value: index});
-    const subContent = index;
-    this.props.updateData(subContent);
+
+    this.props.updateData(index);
     return {
-      subContent
+      index
     }
   }
 render() {
 
   const { classes } = this.props;
-
-  const subContent = this.state.subContent;
+  const contentArr = this.props.content;
 
   return (
     <Grid style={this.props.thisStyle}>
     <Toolbar className={classes.ContestBar}>
-    <Grid alignItems="baseline">
+    <Grid>
 
     <Tabs
       value={this.current() || this.state.value}
@@ -94,8 +86,8 @@ render() {
       textColor="primary"
       onChange={this.handleChange}
     >
-      {this.props.content.map((item, index) => (
-                <Tab label={item.label} className={classes.tabItem} onClick={() => this.handleSubmenu(index)}></Tab>
+      {contentArr.map((item, index) => (
+                <Tab key={index} label={item.label} className={classes.tabItem} onClick={() => this.handleSubmenu(index)}></Tab>
       ))}
     </Tabs>
 

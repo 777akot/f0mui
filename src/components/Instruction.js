@@ -1,16 +1,13 @@
 import React,  { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link, withRouter } from 'react-router-dom';
-import classNames from 'classnames';
+import { withRouter } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
-const qs = require('query-string');
 const backgroundShape = require('../images/shape.svg');
 
 const numeral = require('numeral');
@@ -160,8 +157,6 @@ class Instruction extends Component {
 render() {
 
   const { classes } = this.props;
-  const queryString = this.props.location.search
-  const parsed = queryString ? qs.parse(queryString) : {}
   const steps = getSteps();
   const { activeStep } = this.state;
 
@@ -187,7 +182,7 @@ render() {
 
       <div className={classes.topInfo}>
         <div>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <Typography variant="h4" style={{fontWeight: 'bold'}} gutterBottom>
             Information
           </Typography>

@@ -1,11 +1,18 @@
 const MyMenu = [
   {
     label: "Home",
-    pathname: "/"
+    pathname: "/",
+    authorized: true,
   },
   {
     label: "Dashboard",
-    pathname: "/dashboard"
+    pathname: "/dashboard",
+    authorized: true,
+  },
+  {
+    label: "Sign in",
+    click: "signinbut",
+    authorized: false,
   },
 
 

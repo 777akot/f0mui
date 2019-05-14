@@ -1,8 +1,7 @@
 import React from 'react'
-import { Route, BrowserRouter, Switch, Link } from 'react-router-dom'
+import { Route, BrowserRouter, Switch } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
-import Wizard from './components/Wizard'
-import Cards from './components/Cards'
+import Signin from './components/Signin'
 import Main from './components/Main'
 import Signup from './components/Signup'
 import ScrollToTop from './components/ScrollTop'
@@ -16,6 +15,7 @@ export default props => (
           <Route exact path='/' component={ Main } />
           <Route exact path='/dashboard' component={ Dashboard } />
           <Route exact path='/signup' component={ Signup } />
+          <Route exact path='/signin' component={ Signin } />
         </Switch>
       </ScrollToTop>
     </BrowserRouter>

@@ -1,20 +1,17 @@
 import React,  { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import InstructionDialog from './dialogs/InstructionDialog';
-import SwipeDialog from './dialogs/SwipeDialog';
+//import Button from '@material-ui/core/Button';
+import SignDialog from './dialogs/SignDialog';
 
 import Topbar from './Topbar';
-import Wizard from './Wizard';
 import Footer from './Footer';
 import Carousel from './Carousel';
 import Instruction from './Instruction';
-import PrimarySearchAppBar from './PrimarySearchAppBar';
 import ContestMenu from './ContestMenu';
 import MainContent from './Contents';
 import Avatar from '@material-ui/core/Avatar';
@@ -23,8 +20,6 @@ import Divider from '@material-ui/core/Divider';
 import r1 from '../images/r1.svg';
 
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
@@ -134,24 +129,18 @@ class Main extends Component {
     learnMoredialog: false,
     getStartedDialog: false,
     subContent: 0,
+    authorized: false,
+    signDialog: false,
   };
 
   componentDidMount() {}
-
-  openDialog = (event) => {
-    this.setState({learnMoredialog: true});
-  }
-
-  dialogClose = (event) => {
-    this.setState({learnMoredialog: false});
-  }
 
   openGetStartedDialog = (event) => {
     this.setState({getStartedDialog: true});
   }
 
-  closeGetStartedDialog = (event) => {
-    this.setState({getStartedDialog: false});
+  closeSignDialog = (event) => {
+    this.setState({signDialog: false});
   }
 
   handleSubmenu = (event) => {
@@ -162,6 +151,13 @@ class Main extends Component {
     this.setState({ subContent: value })
   }
 
+  signdialogopen = (signDialog) => {
+    this.setState({ signDialog: signDialog })
+  }
+
+  signAuthorized = (value) => {
+    this.setState({authorized: value })
+  }
 
   render() {
     const { classes } = this.props;
@@ -171,9 +167,9 @@ class Main extends Component {
       <React.Fragment>
         <CssBaseline />
 
-        <Topbar />
+        <Topbar signdialogopen={this.signdialogopen} authorized={this.state.authorized}/>
 
-        <div className={classes.root}>
+        <div>
 
           <Grid container justify="center">
 
@@ -199,28 +195,30 @@ class Main extends Component {
 
                 <Grid item xs={12}>
                   <Paper>
-                  <ContestMenu updateData={this.updateData} content={mainContent} />
+                  <ContestMenu updateData={this.updateData} content={mainContent}/>
                     <div>
                       <div className={classes.paper}>
 
                         <Typography variant="h4" color='primary' gutterBottom>
                         {mainContent.slice(subContent,subContent + 1).map((item, index) => (
 
-                            <div>
+                            <div key={index}>
                             {item.label}
                             </div>
 
                         ))}
                         </Typography>
-                        <Typography>
+
                         {mainContent.slice(subContent,subContent + 1).map((item, index) => (
 
-                            <div>
+                            <div key={index}>
+                            <Typography>
                             {item.content}
+                            </Typography>
                             </div>
 
                         ))}
-                        </Typography>
+
 
                       </div>
                     </div>
@@ -260,7 +258,7 @@ class Main extends Component {
                         </Typography>
                       </div>
                       <Grid spacing={16} alignItems="center" justify="center" container>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -279,7 +277,7 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -298,7 +296,7 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -317,7 +315,7 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -336,7 +334,7 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -355,7 +353,7 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={12} md={2}>
                       <Card className={classes.card}>
                           <CardMedia
                             className={classes.media}
@@ -374,7 +372,9 @@ class Main extends Component {
                           </CardContent>
                       </Card>
                       </Grid>
+
                       <Divider />
+
                         <Grid item xs={12}>
                           <Typography variant="h4" color='secondary' gutterBottom className={classes.grid}>
                             A BUNCH OF GREAT SPONSORS
@@ -403,14 +403,11 @@ class Main extends Component {
             </Grid>
           </Grid>
 
-          <SwipeDialog
-            open={this.state.learnMoredialog}
-            onClose={this.dialogClose} />
-          <InstructionDialog
-            open={this.state.getStartedDialog}
-            onClose={this.closeGetStartedDialog}
+          <SignDialog
+            authorized={this.signAuthorized}
+            open={this.state.signDialog}
+            onClose={this.closeSignDialog}
           />
-
         </div>
         <Footer />
       </React.Fragment>
