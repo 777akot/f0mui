@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ContestMenu from './ContestMenu';
 import DashContents from './DashContents';
+import DashProfileContents from './DashProfileContents';
 import Topbar from './Topbar';
 import NestedList from './NestedList';
 import FolderOpen from '@material-ui/icons/FolderOpen';
@@ -16,6 +17,15 @@ import ReactVirtualizedTable from './ReactVirtualizedTable';
 import VerticalLinearStepper from './VerticalLinearStepper';
 import EssayForm from './EssayForm';
 import Footer from './Footer';
+import AccountData from './AccountData';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Roles from './Roles.js';
+import MenuItem from '@material-ui/core/MenuItem';
+import Rte from './Rte.js'
 
 const numeral = require('numeral');
 numeral.defaultFormat('0,000');
@@ -43,7 +53,6 @@ const styles = theme => ({
     opacity: 0.05
   },
   paper: {
-    boxShadow: false,
     padding: theme.spacing.unit * 3,
     textAlign: 'left',
     color: theme.palette.text.secondary
@@ -60,9 +69,10 @@ const styles = theme => ({
     zIndex: theme.zIndex.drawer + 1,
     marginTop: 100
   },
-  outlinedButtom: {
-    textTransform: 'uppercase',
-    margin: theme.spacing.unit
+  outlinedButton: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
   },
   actionButtom: {
     textTransform: 'uppercase',
@@ -77,25 +87,15 @@ const styles = theme => ({
   block: {
     padding: theme.spacing.unit * 2,
   },
-  loanAvatar: {
-    display: 'inline-block',
-    verticalAlign: 'center',
-    width: 16,
-    height: 16,
-    marginRight: 10,
-    marginBottom: -2,
-    color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.main
-  },
-  interestAvatar: {
-    display: 'inline-block',
-    verticalAlign: 'center',
-    width: 16,
-    height: 16,
-    marginRight: 10,
-    marginBottom: -2,
-    color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.light
+  bigAvatar: {
+    margin: 10,
+    width: 'inherit',
+    height: 'inherit',
+    backgroundColor: '#aaa',
+    objectFit: 'cover',
+    maxwidth: 20,
+    height: 'auto',
+    opacity: 0.7,
   },
   inlining: {
     display: 'inline-block',
@@ -117,47 +117,142 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     flexShrink: 0,
   },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
 });
 
 class DashAccountProfile extends Component {
   state = {
+    name: AccountData[0].name,
+    surname: AccountData[0].surname,
+    displayname: AccountData[0].displayname,
+    role: AccountData[0].role,
+    mail: AccountData[0].mail,
     open: false,
   };
-
+  handleChange = name => event => {
+      this.setState({ [name]: event.target.value });
+    };
   render() {
     const { classes } = this.props;
     const updateData = this.props.updateData;
-    const dashContent = DashContents;
+    const dashProfileContent = DashProfileContents;
     const subContent = this.props.subContent;
+    const roles = Roles;
 
     return (
       <>{this.props.open ?
       <>
-      <Grid item xs={12} alignItems="center" container>
+      <Grid justify='flex-start' direction='row' alignItems='stretch' spacing={24} container>
 
-        <Typography variant="h6" gutterBottom>Profile</Typography>
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>Profile</Typography>
+        </Grid>
 
-      </Grid>
-      <Grid item xs={12}>
-        <Paper className={classes.paper}>
-          <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
-            Content
-          </Typography>
-          <ContestMenu updateData={updateData} content={dashContent} />
-          {dashContent.slice(subContent,subContent + 1).map((item, index) => (
-
-            <Grid className={classes.grid} key={index}>
-              <Typography style={{marginBottom: 40}}>
-              {item.content}
-              </Typography>
-
-              <Button variant="outlined" onClick={() => {this.props.editText(item)}}><EditIcon /></Button>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+          <Grid
+            direction="row"
+            justify="flex-start"
+            alignItems="stretch"
+            container
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+            }}>
+            <Grid md={2} item style={{maxWidth:150,minWidth:60}}>
+              <Avatar alt="Mr Sharp" src={AccountData[0].avatar} className={classes.bigAvatar}/>
             </Grid>
-
-          ))}
-        </Paper>
+            <Grid md={5} item>
+            <List style={{margin:0,padding:0}}>
+              <ListItem>
+                <TextField
+                  id="name"
+                  label="Name"
+                  className={classes.textField}
+                  value={this.state.name}
+                  onChange={this.handleChange('name')}
+                  margin="normal"
+                />
+                <TextField
+                  id="surname"
+                  label="Last name"
+                  className={classes.textField}
+                  value={this.state.surname}
+                  onChange={this.handleChange('surname')}
+                  //helperText="Some important text"
+                  margin="normal"
+                />
+              </ListItem>
+              <ListItem>
+                <TextField
+                  id="displayname"
+                  label="Display Name"
+                  className={classes.textField}
+                  value={this.state.displayname}
+                  onChange={this.handleChange('login')}
+                  //helperText="Some important text"
+                  margin="normal"
+                />
+                <TextField
+                  id="role"
+                  select
+                  label="Role"
+                  className={classes.textField}
+                  value={this.state.role}
+                  onChange={this.handleChange('role')}
+                  SelectProps={{
+                    MenuProps: {
+                      className: classes.menu,
+                    },
+                  }}
+                  margin="normal"
+                >
+                  {roles.map(option => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </ListItem>
+              <ListItem>
+                <TextField
+                  id="mail"
+                  label="E-mail"
+                  className={classes.textField}
+                  value={this.state.mail}
+                  onChange={this.handleChange('mail')}
+                  //helperText="Some important text"
+                  margin="normal"
+                />
+                <Button variant="outlined" className={classes.outlinedButton}>Set Password</Button>
+              </ListItem>
+              <ListItem>
+              <TextField
+                error
+                id="standard-read-only-input"
+                label="Profile status"
+                defaultValue={AccountData[0].status}
+                className={classes.textField}
+                margin="normal"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              </ListItem>
+              <ListItem>
+              <Button variant="outlined" className={classes.textField}>Save</Button>
+              </ListItem>
+            </List>
+            </Grid>
+          </Grid>
+          </Paper>
+        </Grid>
+        <Grid style={{marginBottom: 200}}></Grid>
       </Grid>
-      <Grid style={{marginBottom: 200}}></Grid>
       </>
       : ''}
       </>
@@ -169,10 +264,11 @@ class DashAccountProfile extends Component {
 class DashContest extends Component {
   state = {
     open: false,
+    editing: this.props.editing,
 
   };
   textEditor = () => {
-    alert("TEXT");
+    //alert("TEXT");
     return <EssayForm open={this.state.editing} textValue={DashContents[this.state.subContent].content} />};
 
   render() {
@@ -186,14 +282,12 @@ class DashContest extends Component {
     return (
       <>{this.props.open ?
       <Grid justify='flex-start' direction='row' alignItems='stretch' spacing={24} container>
-          <Grid item xs={12} container>
-            <FolderOpen style={{marginRight: 12}}/>
-            <Typography variant="h6" gutterBottom>My Contests/Man & Machine</Typography>
 
+          <Grid item xs={12} container>
+            <Typography variant="h6" gutterBottom>My Contests / Man & Machine</Typography>
           </Grid>
 
           <Grid item xs={12} md={5} container>
-
 
             <Paper className={classes.paper}>
               <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
@@ -216,20 +310,30 @@ class DashContest extends Component {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
-                Content
+              Contest content
               </Typography>
               <ContestMenu updateData={updateData} content={dashContent} />
-              {dashContent.slice(subContent,subContent + 1).map((item, index) => (
+              <Grid className={classes.grid}>
+              {!this.props.editing ?
+                <>
 
-                <Grid className={classes.grid} key={index}>
+
+
                   <Typography style={{marginBottom: 40}}>
-                  {item.content}
+                  {dashContent[subContent].content}
                   </Typography>
 
-                  <Button variant="outlined" onClick={() => {this.props.editText(item)}}><EditIcon /></Button>
-                </Grid>
+                  <Button variant="outlined" onClick={() => {this.props.editText(subContent)}}><EditIcon /></Button>
 
-              ))}
+
+
+                </>
+                :
+
+                <EssayForm textValue={dashContent[subContent].content} editing={this.props.editText}/>
+              }
+              </Grid>
+
             </Paper>
           </Grid>
 
@@ -261,11 +365,11 @@ class Dashboard extends Component {
     this.setState({ editing: false })
   }
 
-  editText = (item) => {
+  editText = (item,editing) => {
 
     if(this.state.editing===false){
       this.setState({ editing: true });
-      alert(this.state.subContent + ' . ' + item + ' . ' + this.textEditor);
+      //alert(this.state.subContent + ' . ' + item + ' . ' + this.textEditor);
 
     } else {
       this.setState({ editing: false });
@@ -291,10 +395,9 @@ class Dashboard extends Component {
         <CssBaseline />
         <Topbar currentPath={currentPath}  signdialogopen={this.signdialogopen} authorized={this.state.authorized}/>
         <div className={classes.root}>
-        <Grid direction="row" alignItems="stretch" justify="space-evenly" container style={{marginTop:70}} spacing={24}>
-          <Grid item xs={12}></Grid>
+        <Grid direction="row" alignItems="stretch" justify="flex-start" wrap="nowrap" container style={{marginTop:90}} spacing={24}>
 
-          <Grid item xs={2}>
+          <Grid item xs={2} style={{minWidth: 200}}>
 
               <NestedList selectedPart={this.partSelector} currentpart={this.state.selectedPart} />
 
@@ -304,7 +407,7 @@ class Dashboard extends Component {
 
             <DashAccountProfile {...this.props} updateData={this.updateData} open={this.state.selectedPart==='account'}/>
              :
-            <DashContest {...this.props} updateData={this.updateData} open={this.state.selectedPart==='contest'} subContent={this.state.subContent} editText={this.editText} />
+            <DashContest {...this.props} updateData={this.updateData} open={this.state.selectedPart==='contest'} editing={this.state.editing} subContent={this.state.subContent} editText={this.editText} />
 
             }
           </Grid>

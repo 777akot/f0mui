@@ -106,46 +106,18 @@ const styles = theme => ({
 })
 
 const messagesArray = [
-  {
-    label: 'Atria',
-    to: '#',
-  },
-  {
-    label: 'Callisto',
-    to: '#',
-  },
-  {
-    label: 'Dione',
-    to: '#',
-  },
-  {
-    label: 'Ganymede',
-    to: '#',
-  },
-  {
-    label: 'Hangouts Call',
-    to: '#',
-  },
-  {
-    label: 'Luna',
-    to: '#',
-  },
-  {
-    label: 'Oberon',
-    to: '',
-  },
-
+  'Atria',
+  'Callisto',
+  'Dione',
+  'Ganymede',
+  'Hangouts Call',
+  'Luna',
+  'Oberon',
 ];
 
 const accountMenuArray = [
-  {
-    label: 'Profile',
-    to: '/dashboard',
-  },
-  {
-    label: 'Sign out',
-    to: '/dashboard',
-  }
+  'Profile',
+  'Sign out',
 ];
 
 class AccountCard extends Component {
@@ -163,7 +135,7 @@ class AccountCard extends Component {
 }
   render() {
 
-    if(this.props.open===true) {
+    if(this.props.open==true) {
     this.result =
     <Grid container alignItems="baseline" spacing={24}>
     <Grid item xs={12}>
@@ -244,11 +216,12 @@ class Topbar extends Component {
 
     const { classes } = this.props;
     const authorized = this.props.authorized;
+
     function renderAccountMenu(handleProfileMenuOpen) {
     if(authorized===true){
     return <div className={classes.sectionDesktop}>
       <PopMenu contents={messagesArray}>
-        <Badge badgeContent={messagesArray.length} color="primary">
+        <Badge badgeContent={17} color="primary">
         <NotificationsIcon />
         </Badge>
         <></>
@@ -278,7 +251,7 @@ class Topbar extends Component {
                       </Link>
                     </Typography>
                   </div>
-
+                  { !this.props.noTabs && (
                     <React.Fragment>
                       <div className={classes.productLogo}>
                         <Typography>
@@ -297,20 +270,18 @@ class Topbar extends Component {
                           <List>
                           {MyMenu
                             .filter(item => item.authorized===this.props.authorized)
-                            .map((item, index) => (
-                              <ListItem
+                            .map((item, index) =>
+                              <Tab
                                 key={index}
                                 component={Link}
                                 to={{pathname: item.pathname}}
                                 onClick={this.handleSignin}
                                 classes={{root: classes.tabItem}}
                                 label={item.label}
-                                >
-                                <ListItemText primary={item.label} />
-                                </ListItem>
-                            ))}
-                          </List>
+                                />
 
+                          )}
+                          </List>
                         </SwipeableDrawer>
 
 
@@ -339,6 +310,8 @@ class Topbar extends Component {
 
 
                     </React.Fragment>
+
+                  )}
 
               </Grid>
 

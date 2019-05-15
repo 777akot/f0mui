@@ -14,7 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-
+import { Link, withRouter } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -31,11 +31,16 @@ const ITEM_HEIGHT = 48;
 class PopMenu extends React.Component {
   state = {
     open: false,
-
+    selected: '',
   };
 
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
+  };
+
+  handleClick = (value,target) => {
+    this.setState(value => ({ selected: value }));
+    this.handleClose(target);
   };
 
   handleClose = event => {
@@ -91,8 +96,8 @@ class PopMenu extends React.Component {
                     <Divider/>
                     <MenuList>
                     {contents.map(content => (
-                      <MenuItem key={content} selected={content === 'Pyxis'} onClick={this.handleClose}>
-                        {content}
+                      <MenuItem key={content.label} selected={content.label === 'Pyxis'} component={Link} to={content.to} onClick={() => {this.handleClick(content.to,this)}}>
+                        {content.label}
                       </MenuItem>
                     ))}
                     </MenuList>
@@ -113,4 +118,4 @@ PopMenu.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PopMenu);
+export default withRouter(withStyles(styles)(PopMenu));

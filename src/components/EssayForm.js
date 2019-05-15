@@ -3,6 +3,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Savealt from '@material-ui/icons/SaveAlt';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   textarea: {
@@ -24,7 +25,8 @@ class EssayForm extends React.Component {
     super(props);
     const textValue = this.props.textValue;
     this.state = {
-      value: textValue
+      value: textValue,
+      editing: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,8 +38,8 @@ class EssayForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('An essay was submitted: ' + this.state.value);
     event.preventDefault();
+    this.props.editing();
   }
 
   render() {
@@ -45,12 +47,11 @@ class EssayForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} >
         <label>
-          Enter text:
           <TextField
           multiline
           rows="5" value={this.state.value} onChange={this.handleChange} className={classes.textarea}/>
         </label>
-        <Button variant="outlined" type="submit" value="Submit"><Savealt /></Button>
+        <Button variant="outlined" type="submit"><Savealt />Save</Button>
       </form>
     );
   }

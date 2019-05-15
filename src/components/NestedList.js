@@ -147,7 +147,7 @@ class NestedList extends React.Component {
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
-        <ListItemText primary="Account" />
+        <ListItemText primary="Profile" />
       </ListItem>
 
       <ContestSubMenu {...this.props}/>

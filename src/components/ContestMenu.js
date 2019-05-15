@@ -6,23 +6,34 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
-
-
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import AppBar from '@material-ui/core/AppBar';
 const styles = theme => ({
 
   ContestBar: {
     boxShadow: 'none',
-    borderBottom: `1px solid ${theme.palette.grey['100']}`,
     backgroundColor: '000',
     padding: 0,
     zindex: -1,
-
   },
   tabItem: {
     paddingTop: 20,
     paddingBottom: 20,
     minWidth: 'auto',
     zindex: -1,
+  },
+  tabContainer: {
+    borderBottom: `1px solid ${theme.palette.grey['100']}`,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
+  },
+  iconContainer: {
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block'
+    }
   },
 })
 
@@ -38,25 +49,6 @@ class ContestMenu extends Component {
   };
   componentDidMount() {
     window.scrollTo(0, 0);
-  }
-
-  current = () => {
-    if(this.props.currentPath === '#') {
-      return 0
-    }
-    if(this.props.currentPath === '#') {
-      return 1
-    }
-    if(this.props.currentPath === '#') {
-      return 2
-    }
-    if(this.props.currentPath === '#') {
-      return 3
-    }
-    if(this.props.currentPath === '#') {
-      return 4
-    }
-
   }
 
 
@@ -76,27 +68,28 @@ render() {
   const contentArr = this.props.content;
 
   return (
-    <Grid style={this.props.thisStyle}>
     <Toolbar className={classes.ContestBar}>
-    <Grid>
 
+    <div className={classes.iconContainer}>
+      <IconButton onClick={this.mobileMenuOpen} className={classes.iconButton} color="inherit" aria-label="Menu">
+        <MenuIcon />
+      </IconButton>
+    </div>
+
+    <div className={classes.tabContainer}>
     <Tabs
-      value={this.current() || this.state.value}
+      value={this.state.value}
       indicatorColor="primary"
       textColor="primary"
       onChange={this.handleChange}
     >
       {contentArr.map((item, index) => (
-                <Tab key={index} label={item.label} className={classes.tabItem} onClick={() => this.handleSubmenu(index)}></Tab>
+        <Tab key={index} label={item.label} className={classes.tabItem} onClick={() => this.handleSubmenu(index)}></Tab>
       ))}
     </Tabs>
+    </div>
 
-    </Grid>
     </Toolbar>
-    </Grid>
-
-
-
 
   );
 }
