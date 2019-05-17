@@ -3,7 +3,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Savealt from '@material-ui/icons/SaveAlt';
-import IconButton from '@material-ui/core/IconButton';
+//import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   textarea: {
@@ -49,6 +49,7 @@ class EssayForm extends React.Component {
         <label>
           <TextField
           multiline
+          variant="outlined"
           rows="5" value={this.state.value} onChange={this.handleChange} className={classes.textarea}/>
         </label>
         <Button variant="outlined" type="submit"><Savealt />Save</Button>

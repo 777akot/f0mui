@@ -4,11 +4,10 @@ import { withRouter } from 'react-router-dom';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Grid from '@material-ui/core/Grid';
+//import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
-import AppBar from '@material-ui/core/AppBar';
 const styles = theme => ({
 
   ContestBar: {

@@ -14,9 +14,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import MyMenu from './MyMenu';
-import Menu from '@material-ui/core/Menu';
+//import Menu from '@material-ui/core/Menu';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
+//import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircle from '@material-ui/icons/PersonOutline';
 import NotificationsIcon from '@material-ui/icons/NotificationsNone';
 
