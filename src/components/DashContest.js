@@ -12,6 +12,7 @@ import ProjectDetails from './ProjectDetails';
 import ContestMenu from './ContestMenu';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
+import ProjectCard from './ProjectCard';
 
 const styles = theme => ({
   root: {
@@ -119,7 +120,7 @@ class DashContest extends Component {
     const subContent = this.props.subContent;
     const dashContent = DashContents;
     const updateData = this.props.updateData;
-  
+
 
     return (
       <>{this.props.open ?
@@ -128,7 +129,7 @@ class DashContest extends Component {
           <Grid item xs={12} container>
             <Typography variant="h6" gutterBottom>My Contests / Man & Machine</Typography>
           </Grid>
-
+          {this.props.accountType != 2 ?
           <Grid item xs={12} md={7} style={{minWidth: 550}}>
 
             <Paper className={classes.paper}>
@@ -136,7 +137,8 @@ class DashContest extends Component {
             </Paper>
 
           </Grid>
-
+          : ''}
+          {this.props.accountType != 2 ?
           <Grid item xs={12} md={5} container>
 
             <Paper className={classes.paper}>
@@ -147,6 +149,7 @@ class DashContest extends Component {
             </Paper>
 
           </Grid>
+          : '' }
 
           <Grid item xs={12} md={7}>
             <Paper className={classes.paper}>
@@ -157,6 +160,7 @@ class DashContest extends Component {
             </Paper>
           </Grid>
 
+          {this.props.accountType != 2 ?
           <Grid item xs={12} md={5}>
 
             <Paper className={classes.paper}>
@@ -167,7 +171,9 @@ class DashContest extends Component {
             </Paper>
 
           </Grid>
+          : ''}
 
+          {this.props.accountType != 2 ?
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
@@ -197,7 +203,19 @@ class DashContest extends Component {
 
             </Paper>
           </Grid>
+          : ''}
 
+          {this.props.accountType === 2 ?
+            <Grid item xs={12} md={5}>
+              <Paper className={classes.paper}>
+                <Typography style={{textTransform: 'uppercase'}} color='secondary' gutterBottom>
+                General Details
+                </Typography>
+                <ProjectCard />
+              </Paper>
+            </Grid>
+
+          : ''}
       </Grid>
       : ''}
       </>

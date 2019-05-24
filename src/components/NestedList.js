@@ -61,7 +61,7 @@ class ContestSubMenu extends React.Component {
 
 
 
-      {this.state.currentcontestopen && (this.props.currentpart === 'contest') ?
+      {this.state.currentcontestopen && this.props.currentpart === 'contest' && this.props.accountType!=2 ?
       <><Divider />
       <ListItem>
          <ControlledOpenSelect />

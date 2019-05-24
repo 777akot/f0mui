@@ -10,16 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Roles from './Roles.js';
 import AccountData from './AccountData';
 
-const challengeOnOff = [
-  {
-    label: "Открыто для попыток",
-  },
-  {
-    label: "Закрыто",
-  },
-
-];
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -111,7 +101,7 @@ const styles = theme => ({
   },
 });
 
-class ProjectDetails extends React.Component {
+class ProjectCard extends React.Component {
 
   state = {
     name: AccountData[0].name,
@@ -119,8 +109,8 @@ class ProjectDetails extends React.Component {
     displayname: AccountData[0].displayname,
     role: AccountData[0].role,
     mail: AccountData[0].mail,
+    token: "943af478d3ff3d4d760020c11af102b79c440513",
     open: false,
-    challengeOnOff: challengeOnOff[0],
   };
   handleChange = name => event => {
       this.setState({ [name]: event.target.value });
@@ -132,20 +122,38 @@ render() {
 
 <List style={{margin:0,padding:0}}>
   <ListItem>
+    <Button variant="outlined">Visit contest page</Button>
+  </ListItem>
+  <ListItem>
     <TextField
       id="title"
-      label="Title"
-      value={this.state.name}
-      onChange={this.handleChange('name')}
+      InputProps={{
+        readOnly: true,
+      }}
+      label="API"
+      value="http://f-0.io/submit/your_personal_token"
       margin="normal"
       fullWidth
     />
   </ListItem>
   <ListItem>
+    <TextField
+      id="title"
+      InputProps={{
+        readOnly: true,
+      }}
+      label="Your Personal Token"
+      value={this.state.token}
+      margin="normal"
+      fullWidth
+    />
+  </ListItem>
+  <ListItem>
+  {this.props.accountType === 0 ?
   <TextField
-    id="onoff"
+    id="role"
     select
-    label="Доступ"
+    label="Participate"
     fullWidth
     value={this.state.role}
     onChange={this.handleChange('role')}
@@ -156,22 +164,23 @@ render() {
     }}
     margin="normal"
   >
-    {challengeOnOff.map(option => (
+    {roles.map(option => (
       <MenuItem key={option.label} value={option.label}>
         {option.label}
       </MenuItem>
     ))}
   </TextField>
 
+: ''}
   </ListItem>
   <ListItem>
-  <Button variant="outlined" className={classes.textField}>Save</Button>
+  <Button variant="outlined" style={{border: "1px solid #F00"}} className={classes.textField}>Leave contest</Button>
   </ListItem>
   <ListItem>
   <TextField
     error
     id="standard-read-only-input"
-    label="Profile status"
+    label="Submit status"
     defaultValue={AccountData[0].status}
     fullWidth
     margin="normal"
@@ -189,4 +198,4 @@ render() {
 }
 
 
-export default withStyles(styles)(ProjectDetails);
+export default withStyles(styles)(ProjectCard);

@@ -118,6 +118,7 @@ class Dashboard extends Component {
     authorized: true,
     editing: false,
     selectedPart: 'account',
+    accountType: 1,
   };
 
 
@@ -160,15 +161,30 @@ class Dashboard extends Component {
 
           <Grid item xs={2} style={{minWidth: 200}}>
 
-              <NestedList selectedPart={this.partSelector} currentpart={this.state.selectedPart} />
+              <NestedList
+                selectedPart={this.partSelector}
+                currentpart={this.state.selectedPart}
+                accountType={this.state.accountType}
+              />
 
           </Grid>
           <Grid item xs={10}>
             {this.state.selectedPart === 'account' ?
 
-            <DashAccountProfile {...this.props} updateData={this.updateData} open={this.state.selectedPart==='account'}/>
+            <DashAccountProfile {...this.props}
+              accountType={this.state.accountType}
+              updateData={this.updateData}
+              open={this.state.selectedPart==='account'}
+            />
              :
-            <DashContest {...this.props} updateData={this.updateData} open={this.state.selectedPart==='contest'} editing={this.state.editing} subContent={this.state.subContent} editText={this.editText} />
+            <DashContest {...this.props}
+              accountType={this.state.accountType}
+              updateData={this.updateData}
+              open={this.state.selectedPart==='contest'}
+              editing={this.state.editing}
+              subContent={this.state.subContent}
+              editText={this.editText}
+            />
 
             }
           </Grid>
