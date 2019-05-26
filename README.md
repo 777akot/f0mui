@@ -14,7 +14,7 @@
     graphContent: graphContent, --- для Графика
     messagesArray: messagesArray, --- оповещения в тулбаре
     accountInfo: accountInfo, --- инфа пользователя
-    accountRole: accountInfo.accountRole,  
+    accountRole: accountInfo.accountRole,  --- на основе значения либо разработчик {2} либо {0,1} - заказчик или админ (костыль конечно)
     projectData: projectData, --- Данные проекта
 ```
 
