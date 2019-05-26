@@ -11,7 +11,7 @@
 Стэйты Dashboard
     projectContent: projectContent, --- Контент проекта
     leaderboardContent: leaderboardContent, --- для Лидерборда
-    graphContent: graphContent, --- для Графика
+    graphContent: graphContent, --- для Графика я так понимаю одинаковые могут быть с Лидербордом, но пока не уверен поэтому отдельно
     messagesArray: messagesArray, --- оповещения в тулбаре
     accountInfo: accountInfo, --- инфа пользователя
     accountRole: accountInfo.accountRole,  --- на основе значения либо разработчик {2} либо {0,1} - заказчик или админ (костыль конечно)
