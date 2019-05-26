@@ -10,8 +10,8 @@
     
 Стэйты Dashboard
     projectContent: projectContent, --- Контент проекта
-    leaderboardContent: leaderboardContent, --- Лидерборд
-    graphContent: graphContent, --- График
+    leaderboardContent: leaderboardContent, --- для Лидерборда
+    graphContent: graphContent, --- для Графика
     messagesArray: messagesArray, --- оповещения в тулбаре
     accountInfo: accountInfo, --- инфа пользователя
     accountRole: accountInfo.accountRole,  
