@@ -1,6 +1,6 @@
 В папке imports/samovar с роутами и тд. как в облаке
 
-в папке imports/samovar/pages лежит отдельно папка content просто данные которые я импорчу на двух страницах Main и Dashboard. 
+в папке imports/samovar/pages лежит отдельно папка content просто данные - названия соответствуют стэйтам. которые я импорчу на двух страницах Main и Dashboard 
 ```
 Стэйты Main
     messagesArray: messagesArray,
